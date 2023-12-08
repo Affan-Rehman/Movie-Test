@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'controllers/search.controller.dart';
 import 'screens/mainscreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MovieServiceController()),
       ],
       child: MaterialApp(
+        theme: ThemeData(textTheme: GoogleFonts.poppinsTextTheme()),
         debugShowCheckedModeBanner: false,
         home: MainScreen(),
       ),

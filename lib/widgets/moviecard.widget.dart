@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'widget.dart';
-
 displaymovieCard({
   double height = 200.0,
   width = 160.0,

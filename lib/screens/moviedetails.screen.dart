@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_test/models/movie.model.dart';
+import 'package:movie_test/screens/ticketscreen.dart';
 import 'package:movie_test/widgets/text.widget.dart';
 import 'package:intl/intl.dart';
 
@@ -44,7 +45,13 @@ class MovieDetailsScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: ElevatedButton(
                               onPressed: () {
-                                // Add the functionality to launch the corresponding screen
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => TicketScreen(
+                                              movieResultsModel:
+                                                  movieResultsModel,
+                                            )));
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -68,7 +75,12 @@ class MovieDetailsScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: OutlinedButton(
                               onPressed: () {
-                                // Add the functionality to launch the corresponding screen
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => TrailerScreen(
+                                //             trailerUrl:
+                                //                 "")));
                               },
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
