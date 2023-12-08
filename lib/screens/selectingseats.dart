@@ -128,11 +128,8 @@ class SelectingSeats extends StatelessWidget {
           const WidgetRow(),
           Spacer(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.07,
-              ),
               Container(
                 width: 108,
                 height: 50,
