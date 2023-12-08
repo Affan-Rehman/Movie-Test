@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-import 'package:movie_app/models/movie.model.dart';
+import 'package:movie_test/models/movie.model.dart';
 
 import '../services/movie.service.dart';
 

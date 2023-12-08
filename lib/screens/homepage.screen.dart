@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:movie_app/models/movie.model.dart';
-import 'package:movie_app/screens/moviedetails.screen.dart';
-import 'package:movie_app/controllers/search.controller.dart';
-import 'package:movie_app/screens/search.screen.dart';
-import 'package:movie_app/widgets/text.widget.dart';
+import 'package:movie_test/models/movie.model.dart';
+import 'package:movie_test/screens/moviedetails.screen.dart';
+import 'package:movie_test/controllers/search.controller.dart';
+import 'package:movie_test/screens/search.screen.dart';
+import 'package:movie_test/widgets/text.widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controllers/movie.controller.dart';
@@ -38,58 +38,24 @@ class MoviesHomePage extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-        elevation: 1,
-        title: displayText("The Movie"),
-      ),
-      body: NotificationListener<ScrollEndNotification>(
-        onNotification: (scrollEnd) {
-          final metrics = scrollEnd.metrics;
-          if (metrics.atEdge) {
-            bool isTop = metrics.pixels == 0;
-            if (isTop) {
-              log("scroll to  top");
-            } else {
-              if (movieList.currentPage < movieList.totalPage) {
-                int currentPage = movieList.currentPage.toInt() + 1;
-                // context
-                //     .read<MovieService>()
-                //     .getPopularMovies(currentPage: currentPage);
-                context
-                    .read<MovieServiceController>()
-                    .getPopularMovies(currentPage: currentPage)
-                    .then((_) {
-                  Future.delayed(Duration.zero, () {
-                    searchPvr.updateSearchList(movieList.movieList);
-                    searchPvr.namesList = movieList.movieList;
-                  });
-                });
-                log("scroll to  bottom ${movieList.currentPage} ${movieList.totalPage}");
-              } else {
-                log("no more data to load");
-              }
-            }
-          }
-          return true;
-        },
-        child: SingleChildScrollView(
-            padding: const EdgeInsets.all(14),
-            child: Consumer<MySearchController>(
-              builder: (context, searchCtr, child) {
-                return searchPvr.namesList.isEmpty
-                    ? Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 2.5,
-                        ),
-                        alignment: Alignment.center,
-                        child: const CircularProgressIndicator(
-                          backgroundColor: Colors.black,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Column(
+      body: SingleChildScrollView(
+          padding: const EdgeInsets.all(14),
+          child: Consumer<MySearchController>(
+            builder: (context, searchCtr, child) {
+              return searchPvr.namesList.isEmpty
+                  ? Container(
+                      margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 2.5,
+                      ),
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(
+                        backgroundColor: Colors.black,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -177,48 +143,43 @@ class MoviesHomePage extends StatelessWidget {
                               )
                             ],
                           ),
-                          displayText(
-                            searchCtr.searchText == ""
-                                ? "Popular Movies"
-                                : "Movie Searches",
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            bottomPadding: 14,
-                            topPadding: 14,
-                          ),
                           searchCtr.searchList.isNotEmpty
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisExtent: 192,
-                                    mainAxisSpacing: 16,
-                                    crossAxisSpacing: 16,
-                                  ),
-                                  itemCount: searchCtr.searchList.length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => MovieDetailsScreen(
-                                              movieResultsModel:
-                                                  searchCtr.searchList[index],
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const ScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 1,
+                                      mainAxisExtent: 200,
+                                      mainAxisSpacing: 16,
+                                      crossAxisSpacing: 16,
+                                    ),
+                                    itemCount: searchCtr.searchList.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  MovieDetailsScreen(
+                                                movieResultsModel:
+                                                    searchCtr.searchList[index],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      child: displaymovieCard(
-                                        image:
-                                            "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
-                                        moviename:
-                                            searchCtr.searchList[index].title,
-                                      ),
-                                    );
-                                  },
+                                          );
+                                        },
+                                        child: displaymovieCard(
+                                          image:
+                                              "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
+                                          moviename:
+                                              searchCtr.searchList[index].title,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 )
                               : Center(
                                   child: displayText(
@@ -229,10 +190,10 @@ class MoviesHomePage extends StatelessWidget {
                                   ),
                                 ),
                         ],
-                      );
-              },
-            )),
-      ),
+                      ),
+                    );
+            },
+          )),
     );
   }
 }

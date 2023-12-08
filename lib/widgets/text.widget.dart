@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// @desc text widget with custom values
 displayText(
   String data, {
   double? fontSize,

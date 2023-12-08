@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/models/movie.model.dart';
+import 'package:movie_test/models/movie.model.dart';
 
 class MySearchController with ChangeNotifier {
   String searchText = '';

@@ -18,6 +18,19 @@ class MovieService {
     }
   }
 
+  // static getMoviesList({int currentPage = 1}) async {
+  //   try {
+  //     final popularMovieUrl = "/movie?api_key=$apiKey&language=en-US";
+  //     final finalUrl = baseurl + popularMovieUrl;
+  //     final response = await http.get(Uri.parse(finalUrl));
+  //     if (response.statusCode == 200) {
+  //       return response.body;
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
+
   //
   static getSearchMoviesList({
     required String searchQuery,
