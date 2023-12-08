@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class MovieSearch extends StatelessWidget {
   MovieSearch({super.key});
   final searchController = TextEditingController();
+  bool searched = false;
   int itemCount = 2;
   List<MovieResultsModel> newList = [];
   @override
@@ -26,7 +27,6 @@ class MovieSearch extends StatelessWidget {
             Consumer<MySearchController>(builder: (context, searchCtr, child) {
           return Stack(
             children: [
-              // Search container always at the top
               Positioned(
                 top: 0,
                 left: 0,
@@ -75,8 +75,10 @@ class MovieSearch extends StatelessWidget {
                             if (value == "") {
                               searchCtr.updateSearchList(searchCtr.namesList);
                               itemCount = 2;
+                              searched = false;
                             } else {
                               itemCount = 1;
+                              searched = true;
                             }
                           },
                           decoration: const InputDecoration(
@@ -88,13 +90,18 @@ class MovieSearch extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          searchController.clear();
+                          if (searched) {
+                            searchController.clear();
+                            searched = false;
+                          }
                         },
                         child: IconButton(
                           icon: const Icon(Icons.close),
                           color: Colors.black,
                           onPressed: () {
-                            searchController.clear();
+                            searched
+                                ? searchController.clear()
+                                : Navigator.pop(context);
                           },
                         ),
                       ),
@@ -144,7 +151,6 @@ class MovieSearch extends StatelessWidget {
                                         ),
                                       )
                                     : const SizedBox.shrink(),
-                                // Display movie grid or message
                                 searchCtr.searchList.isNotEmpty
                                     ? GridView.builder(
                                         shrinkWrap: true,
@@ -172,7 +178,7 @@ class MovieSearch extends StatelessWidget {
                                                   ),
                                                 );
                                               },
-                                              child: itemCount == 1
+                                              child: searched
                                                   ? displaymovieCard(
                                                       image:
                                                           "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",

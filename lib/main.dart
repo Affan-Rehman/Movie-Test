@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:movie_test/adapters/moviemodeladapter.dart';
+import 'package:movie_test/models/movie.model.dart';
 import './controllers/movie.controller.dart';
 import 'package:provider/provider.dart';
-
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'controllers/search.controller.dart';
 import 'screens/mainscreen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Hive.registerAdapter<MovieResultsModel>(MovieResultsModelAdapter());
+  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+  await Hive.openBox<MovieResultsModel>('movieBox');
+
   runApp(const MyApp());
 }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import 'package:movie_test/models/movie.model.dart';
 
@@ -28,41 +29,38 @@ class MovieServiceController with ChangeNotifier {
 
   // recent searches
   List<MovieResultsModel> _recentSearchList = [];
+  List<MovieResultsModel> movieListModelData = [];
   List<MovieResultsModel> get recentSearchList => _recentSearchList;
   set searchListSet(List<MovieResultsModel> movieList) =>
       _recentSearchList = [];
   // @desc get popular movie
   Future getPopularMovies({int currentPage = 1}) async {
-    List<MovieResultsModel> movieListModelData = [];
-    final responseBody =
-        await MovieService.getPopularMoviesList(currentPage: currentPage);
-    final movieList = json.decode(responseBody);
-    notifyListeners();
-
-    for (var element in movieList['results']) {
-      movieListModelData.add(MovieResultsModel.fromJson(element));
-    }
-    _currentPage = movieList['page'];
-    _totalPage = movieList['total_pages'];
-    _movieList = _movieList.toSet().toList();
-    notifyListeners();
+    storeAndLoadData();
     _movieList = [..._movieList, ...movieListModelData.toSet().toList()];
 
     notifyListeners();
   }
 
-  // get search movies
-  Future getSearchMovie(
-      {required String searchQuery, int currentPage = 1}) async {
-    List<MovieResultsModel> searchMovieListModelData = [];
-    final responseData = await MovieService.getSearchMoviesList(
-        searchQuery: searchQuery, currentPage: currentPage);
-    final movieList = json.decode(responseData);
-    for (var element in movieList['results']) {
-      searchMovieListModelData.add(MovieResultsModel.fromJson(element));
+  void storeAndLoadData() async {
+    var box = Hive.box<MovieResultsModel>('movieBox');
+    if (box.isNotEmpty) {
+      _movieList = box.values.toList();
     }
+    final responseBody =
+        await MovieService.getPopularMoviesList(currentPage: 1);
+    final movieList = json.decode(responseBody);
 
-    _recentSearchList = searchMovieListModelData;
-    return _recentSearchList;
+    for (var element in movieList['results']) {
+      movieListModelData.add(MovieResultsModel.fromJson(element));
+    }
+    _movieList = _movieList.toSet().toList();
+    for (var movie in _movieList) {
+      if (!box.containsKey(movie.id)) {
+        box.put(movie.id, movie);
+      }
+    }
+    _currentPage = movieList['page'];
+    _totalPage = movieList['total_pages'];
+    notifyListeners();
   }
 }
