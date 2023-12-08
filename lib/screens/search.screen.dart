@@ -1,274 +1,217 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:movie_test/controllers/search.controller.dart';
-import 'package:movie_test/screens/searchdetails.screen.dart';
+import 'package:movie_test/models/movie.model.dart';
+import 'package:movie_test/screens/moviedetails.screen.dart';
+import 'package:movie_test/screens/resultscreen.dart';
+import 'package:movie_test/widgets/moviecard.widget.dart';
 import 'package:movie_test/widgets/text.widget.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MovieSearch extends StatelessWidget {
-  final List<String> autoSuggestionList;
-  MovieSearch({super.key, required this.autoSuggestionList});
+  MovieSearch({super.key});
   final searchController = TextEditingController();
-  // static const List<String> _options = <String>[
-  //   'aardvark',
-  //   'bobcat',
-  //   'chameleon',
-  // ];
-
+  int itemCount = 2;
+  List<MovieResultsModel> newList = [];
   @override
   Widget build(BuildContext context) {
     final searchPvr = Provider.of<MySearchController>(context, listen: false);
     searchPvr.searchText = "";
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        centerTitle: true,
-        elevation: 0,
-        title: displayText("Search"),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(120),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF6F6FA),
+        body:
+            Consumer<MySearchController>(builder: (context, searchCtr, child) {
+          return Stack(
             children: [
-              Container(
-                height: 60,
-                padding: const EdgeInsets.all(8.0),
-                child: Consumer<MySearchController>(
-                  builder: (context, recentCtr, child) {
-                    return RawAutocomplete<String>(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        return autoSuggestionList.where((String option) {
-                          return option
-                              .contains(textEditingValue.text.toLowerCase());
-                        });
-                      },
-                      fieldViewBuilder: (
-                        BuildContext context,
-                        searchController,
-                        FocusNode focusNode,
-                        VoidCallback onFieldSubmitted,
-                      ) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: TextFormField(
-                              onChanged: (value) {
-                                searchPvr.updateSearchText(value);
-                              },
-                              decoration: InputDecoration(
-                                hintText: 'search movies',
-                                prefixIcon: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.search,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    searchController.clear();
-                                    searchPvr.updateSearchText("");
-                                  },
-                                  icon: Icon(
-                                    Icons.clear,
-                                    color: Colors.black,
-                                    size: searchPvr.searchText == "" ? 0 : 28,
-                                  ),
-                                ),
-                                filled: true,
-                                fillColor: const Color(0xffd2d3f1),
-                                contentPadding: const EdgeInsets.only(top: 10),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                      color: Color(0xffd2d3f1)),
-                                ),
-                                border: InputBorder.none,
-                              ),
-                              controller: searchController,
-                              focusNode: focusNode,
-                              onFieldSubmitted: (value) async {
-                                if (value != "") {
-                                  // Obtain shared preferences.
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-                                  var recentSearchList =
-                                      prefs.getStringList('recentsearchlist') ??
-                                          [];
-
-                                  await prefs
-                                      .setStringList('recentsearchlist',
-                                          {...recentSearchList, value}.toList())
-                                      .then(
-                                    (_) {
-                                      // update provider list
-
-                                      searchPvr.updateRecentSearchList(
-                                          recentSearch: {
-                                        ...recentSearchList,
-                                        value
-                                      }.toList());
-
-                                      // send to next page
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => SearchDetailsScreen(
-                                            searchQuery: value.toLowerCase(),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                }
-                              }),
-                        );
-                      },
-                      optionsViewBuilder: (BuildContext context,
-                          AutocompleteOnSelected<String> onSelected,
-                          Iterable<String> options) {
-                        return Align(
-                          alignment: Alignment.topLeft,
-                          child: Material(
-                            elevation: 4.0,
-                            child: SizedBox(
-                              height:
-                                  autoSuggestionList.length > 2 ? 200.0 : 70,
-                              child: ListView.builder(
-                                padding: const EdgeInsets.all(8.0),
-                                itemCount: options.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final String option =
-                                      options.elementAt(index);
-                                  return GestureDetector(
-                                    onTap: () {
-                                      onSelected(option);
-                                    },
-                                    child: ListTile(
-                                      // trailing: displayText("remove"),
-                                      trailing: GestureDetector(
-                                        onTap: () {
-                                          removeRecentSearchHistory(
-                                            recentCtr: recentCtr,
-                                            index: index,
-                                            searchPvr: searchPvr,
-                                          );
-                                        },
-                                        child: displayText('remove'),
-                                      ),
-                                      title: Text(option),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              displayText(
-                "Recent Searches",
-                leftPadding: 14,
-                topPadding: 30,
-                bottomPadding: 10,
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              )
-            ],
-          ),
-        ),
-      ),
-      body: FutureBuilder(
-        future: getRecentSearch(context: context),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          try {
-            if (snapshot.hasData) {
-              // final snapshotData = snapshot.data;
-              // return Text(snapshotData.toString());
-              return Consumer<MySearchController>(
-                builder: (context, recentCtr, child) {
-                  return ListView.builder(
-                    reverse: true,
-                    itemCount: recentCtr.recentSearchList.length,
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => SearchDetailsScreen(
-                                searchQuery: recentCtr.recentSearchList[index]
-                                    .toString(),
-                              ),
-                            ),
-                          );
-                        },
-                        leading: const Icon(Icons.access_time),
-                        trailing: IconButton(
-                          onPressed: () async {
-                            removeRecentSearchHistory(
-                              recentCtr: recentCtr,
-                              index: index,
-                              searchPvr: searchPvr,
-                            );
-                            autoSuggestionList.removeWhere(
-                              (item) =>
-                                  item == recentCtr.recentSearchList[index],
-                            );
+              // Search container always at the top
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  margin: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.search),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          onFieldSubmitted: (value) {
+                            if (value != "") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          ResultScreen(list: newList)));
+                            }
                           },
-                          icon: const Icon(
-                            Icons.clear,
-                            color: Colors.black,
+                          controller: searchController,
+                          cursorColor: Colors.black,
+                          onChanged: (value) {
+                            searchCtr.updateSearchText(value);
+                            newList = [];
+
+                            for (var i = 0;
+                                i < searchCtr.namesList.length;
+                                i++) {
+                              if (searchCtr.namesList[i].title!
+                                  .toLowerCase()
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase())) {
+                                newList.add(searchCtr.namesList[i]);
+                              }
+                            }
+                            searchCtr.updateSearchList(newList);
+                            if (value == "") {
+                              searchCtr.updateSearchList(searchCtr.namesList);
+                              itemCount = 2;
+                            } else {
+                              itemCount = 1;
+                            }
+                          },
+                          decoration: const InputDecoration(
+                            hintText: 'TV Shows, Movies and more',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(color: Color(0xFF827D88)),
                           ),
                         ),
-                        title: displayText(
-                            recentCtr.recentSearchList[index].toString()),
-                      );
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          searchController.clear();
+                        },
+                        child: IconButton(
+                          icon: const Icon(Icons.close),
+                          color: Colors.black,
+                          onPressed: () {
+                            searchController.clear();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 80,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(30),
+                  child: Consumer<MySearchController>(
+                    builder: (context, searchCtr, child) {
+                      return searchPvr.namesList.isEmpty
+                          ? Container(
+                              margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height / 2.5,
+                              ),
+                              alignment: Alignment.center,
+                              child: const CircularProgressIndicator(
+                                backgroundColor: Colors.black,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                (searchController.text != "")
+                                    ? const Padding(
+                                        padding: EdgeInsets.only(top: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Top Results",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            Divider()
+                                          ],
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                                // Display movie grid or message
+                                searchCtr.searchList.isNotEmpty
+                                    ? GridView.builder(
+                                        shrinkWrap: true,
+                                        physics: const ScrollPhysics(),
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: itemCount,
+                                          mainAxisExtent: 112,
+                                          mainAxisSpacing: 16,
+                                          crossAxisSpacing: 16,
+                                        ),
+                                        itemCount: searchCtr.searchList.length,
+                                        itemBuilder: (context, index) {
+                                          return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        MovieDetailsScreen(
+                                                      movieResultsModel:
+                                                          searchCtr.searchList[
+                                                              index],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: itemCount == 1
+                                                  ? displaymovieCard(
+                                                      image:
+                                                          "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
+                                                      moviename: searchCtr
+                                                          .searchList[index]
+                                                          .title,
+                                                    )
+                                                  : Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}"),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ));
+                                        },
+                                      )
+                                    : Center(
+                                        child: displayText(
+                                          "No Movie Found! ",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          topPadding: 30,
+                                        ),
+                                      ),
+                              ],
+                            );
                     },
-                  );
-                },
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          } catch (e) {
-            rethrow;
-          }
-        },
+                  ),
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
-}
-
-getRecentSearch({required BuildContext context}) async {
-  final searchPvr = Provider.of<MySearchController>(context, listen: false);
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  // get the list, if not found, return empty list.
-  var recentSearchList = prefs.getStringList('recentsearchlist') ?? [];
-  searchPvr.updateRecentSearchList(recentSearch: recentSearchList);
-
-  return recentSearchList;
-}
-
-removeRecentSearchHistory({
-  required MySearchController recentCtr,
-  required int index,
-  required MySearchController searchPvr,
-}) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var searchList = prefs.getStringList('recentsearchlist') ?? [];
-  searchList.removeWhere(
-    (item) => item == recentCtr.recentSearchList[index],
-  );
-  prefs.setStringList('recentsearchlist', searchList);
-  // update provider list
-  searchPvr.updateRecentSearchList(
-    recentSearch: searchList,
-  );
 }

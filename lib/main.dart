@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import './controllers/movie.controller.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/homepage.screen.dart';
 import 'controllers/search.controller.dart';
 import 'screens/mainscreen.dart';
 
