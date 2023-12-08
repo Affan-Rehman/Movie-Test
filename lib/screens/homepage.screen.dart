@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_test/screens/moviedetails.screen.dart';
 import 'package:movie_test/controllers/search.controller.dart';
-import 'package:movie_test/widgets/text.widget.dart';
 import 'package:provider/provider.dart';
 import '../controllers/movie.controller.dart';
 import '../widgets/moviecard.widget.dart';
@@ -36,76 +35,81 @@ class MoviesHomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: const Color(0xFFF6F6FA),
         body: SingleChildScrollView(
-            padding: const EdgeInsets.all(14),
-            child: Consumer<MySearchController>(
-              builder: (context, searchCtr, child) {
-                return searchPvr.namesList.isEmpty
-                    ? Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 2.5,
+          padding: const EdgeInsets.all(14),
+          child: Consumer<MovieServiceController>(
+            builder: (context, movieService, child) {
+              if (movieService.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    color: Colors.white,
+                  ),
+                );
+              } else {
+                return Consumer<MySearchController>(
+                  builder: (context, searchCtr, child) {
+                    if (searchPvr.namesList.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "No Movies Found 🧐",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
-                        alignment: Alignment.center,
-                        child: const CircularProgressIndicator(
-                          backgroundColor: Colors.black,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Padding(
+                      );
+                    } else {
+                      return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            searchCtr.searchList.isNotEmpty
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      physics: const ScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        mainAxisExtent: 200,
-                                        mainAxisSpacing: 16,
-                                        crossAxisSpacing: 16,
-                                      ),
-                                      itemCount: searchCtr.searchList.length,
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) =>
-                                                    MovieDetailsScreen(
-                                                  movieResultsModel: searchCtr
-                                                      .searchList[index],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: displaymovieCard(
-                                            image:
-                                                "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
-                                            moviename: searchCtr
-                                                .searchList[index].title,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 1,
+                                  mainAxisExtent: 200,
+                                  mainAxisSpacing: 16,
+                                  crossAxisSpacing: 16,
+                                ),
+                                itemCount: searchCtr.namesList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => MovieDetailsScreen(
+                                            movieResultsModel:
+                                                searchCtr.namesList[index],
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      );
+                                    },
+                                    child: displaymovieCard(
+                                      image:
+                                          "https://image.tmdb.org/t/p/w500/${searchCtr.namesList[index].backdropPath}",
+                                      moviename:
+                                          searchCtr.namesList[index].title,
                                     ),
-                                  )
-                                : Center(
-                                    child: displayText(
-                                      "No Movie Found 🧐 ",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      topPadding: 30,
-                                    ),
-                                  ),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       );
-              },
-            )),
+                    }
+                  },
+                );
+              }
+            },
+          ),
+        ),
       ),
     );
   }

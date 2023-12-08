@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -10,7 +8,6 @@ class TrailerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("ok" + trailerUrl);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
