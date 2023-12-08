@@ -80,7 +80,7 @@ class MovieDetailsScreen extends StatelessWidget {
                                 //     MaterialPageRoute(
                                 //         builder: (_) => TrailerScreen(
                                 //             trailerUrl:
-                                //                 "")));
+                                //                 "https://api.themoviedb.org/3/movie/${movieResultsModel.id}/videos")));
                               },
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
