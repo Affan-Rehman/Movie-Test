@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_test/models/movie.model.dart';
 import 'package:movie_test/screens/moviedetails.screen.dart';
+import 'package:movie_test/screens/selectingseats.dart';
 
 class TicketScreen extends StatefulWidget {
   final MovieResultsModel movieResultsModel;
@@ -160,7 +161,12 @@ class _TicketScreenState extends State<TicketScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    //selecting seats
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => SelectingSeats(
+                                  movieResultsModel: widget.movieResultsModel,
+                                )));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
