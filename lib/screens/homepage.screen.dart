@@ -5,8 +5,14 @@ import 'package:provider/provider.dart';
 import '../controllers/movie.controller.dart';
 import '../widgets/moviecard.widget.dart';
 
-class MoviesHomePage extends StatelessWidget {
+class MoviesHomePage extends StatefulWidget {
   MoviesHomePage({super.key});
+
+  @override
+  State<MoviesHomePage> createState() => _MoviesHomePageState();
+}
+
+class _MoviesHomePageState extends State<MoviesHomePage> {
   final decoration = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(7),
@@ -18,19 +24,24 @@ class MoviesHomePage extends StatelessWidget {
       )
     ],
   );
+  var movieList = MovieServiceController();
+  var searchPvr = MySearchController();
   final searchController = TextEditingController();
   @override
-  Widget build(BuildContext context) {
-    final searchPvr = Provider.of<MySearchController>(context, listen: false);
-    final movieList =
-        Provider.of<MovieServiceController>(context, listen: false);
+  void initState() {
+    searchPvr = Provider.of<MySearchController>(context, listen: false);
+    movieList = Provider.of<MovieServiceController>(context, listen: false);
     context.read<MovieServiceController>().getPopularMovies().then((_) {
       Future.delayed(Duration.zero, () {
         searchPvr.updateSearchList(movieList.movieList);
         searchPvr.namesList = movieList.movieList;
       });
     });
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xFFF6F6FA),

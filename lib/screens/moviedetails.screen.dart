@@ -145,49 +145,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         children: widget.movieResultsModel.genreIds
                                 ?.map((genreId) {
                               final genre = MovieResultsModel.genres[genreId];
-                              Color genreColor = Colors.blue; // Default color
-
-                              if (genreId == 28) {
-                                genreColor = const Color(0xFF15D2BC); // Action
-                              } else if (genreId == 12) {
-                                genreColor =
-                                    const Color(0xFF008000); // Adventure
-                              } else if (genreId == 16) {
-                                genreColor =
-                                    const Color(0xFFFFA500); // Animation
-                              } else if (genreId == 35) {
-                                genreColor = const Color(0xFF7FFF00); // Comedy
-                              } else if (genreId == 80) {
-                                genreColor = const Color(0xFF8B0000); // Crime
-                              } else if (genreId == 99) {
-                                genreColor =
-                                    const Color(0xFFFFD700); // Documentary
-                              } else if (genreId == 18) {
-                                genreColor = const Color(0xFF0000FF); // Drama
-                              } else if (genreId == 53) {
-                                genreColor =
-                                    const Color(0xFFE26CA5); // Thriller
-                              } else if (genreId == 10751) {
-                                genreColor = const Color(0xFF00FFFF); // Family
-                              } else if (genreId == 14) {
-                                genreColor = const Color(0xFF8A2BE2); // Fantasy
-                              } else if (genreId == 36) {
-                                genreColor = const Color(0xFFA0522D); // History
-                              } else if (genreId == 27) {
-                                genreColor = const Color(0xFF8B008B); // Horror
-                              } else if (genreId == 10402) {
-                                genreColor = const Color(0xFFDA70D6); // Music
-                              } else if (genreId == 9648) {
-                                genreColor = const Color(0xFF2F4F4F); // Mystery
-                              } else if (genreId == 10749) {
-                                genreColor = const Color(0xFFFF00FF); // Romance
-                              } else if (genreId == 878) {
-                                genreColor =
-                                    const Color(0xFF564CA3); // Science Fiction
-                              } else if (genreId == 10770) {
-                                genreColor =
-                                    const Color(0xFFD2691E); // TV Movie
-                              }
+                              Color genreColor =
+                                  genreColorMap[genreId] ?? Colors.blue;
 
                               return Container(
                                 padding: const EdgeInsets.symmetric(

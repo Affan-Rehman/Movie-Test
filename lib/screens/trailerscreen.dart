@@ -9,6 +9,7 @@ class TrailerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -23,7 +24,7 @@ class TrailerScreen extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.arrow_back_ios,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ],
