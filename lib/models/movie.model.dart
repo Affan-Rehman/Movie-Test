@@ -2,38 +2,6 @@
 
 import 'package:hive/hive.dart';
 
-class MovieModel {
-  int? page;
-  List<MovieResultsModel>? results;
-  int? totalPages;
-  int? totalResults;
-
-  MovieModel({this.page, this.results, this.totalPages, this.totalResults});
-
-  MovieModel.fromJson(Map<String, dynamic> json) {
-    page = json['page'];
-    if (json['results'] != null) {
-      results = <MovieResultsModel>[];
-      json['results'].forEach((v) {
-        results!.add(new MovieResultsModel.fromJson(v));
-      });
-    }
-    totalPages = json['total_pages'];
-    totalResults = json['total_results'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['page'] = page;
-    if (results != null) {
-      data['results'] = results!.map((v) => v.toJson()).toList();
-    }
-    data['total_pages'] = totalPages;
-    data['total_results'] = totalResults;
-    return data;
-  }
-}
-
 @HiveType(typeId: 0)
 class MovieResultsModel extends HiveObject {
   @HiveField(0)
@@ -46,7 +14,7 @@ class MovieResultsModel extends HiveObject {
   List<int>? genreIds;
 
   @HiveField(3)
-  int? id;
+  int id;
 
   @HiveField(4)
   String? originalLanguage;
@@ -78,6 +46,9 @@ class MovieResultsModel extends HiveObject {
   @HiveField(13)
   int? voteCount;
 
+  @HiveField(14)
+  String trailerId = "";
+
   static final Map<int, String> genres = {
     28: 'Action',
     12: 'Adventure',
@@ -104,7 +75,7 @@ class MovieResultsModel extends HiveObject {
     this.adult,
     this.backdropPath,
     this.genreIds,
-    this.id,
+    required this.id,
     this.originalLanguage,
     this.originalTitle,
     this.overview,

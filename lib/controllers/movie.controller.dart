@@ -20,7 +20,6 @@ class MovieServiceController with ChangeNotifier {
 
   Future<void> getPopularMovies({int currentPage = 1}) async {
     _isLoading = true;
-    notifyListeners();
 
     try {
       final responseBody =

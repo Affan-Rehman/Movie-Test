@@ -1,7 +1,10 @@
-import 'package:http/http.dart' as http;
+import 'dart:developer';
 
-const baseurl = "https://api.themoviedb.org/3";
-const apiKey = "d501567593ff834b63ac29a78c7b728a";
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'package:movie_test/constants.dart';
+
+final Dio _dio = Dio();
 
 class MovieService {
   static getPopularMoviesList({int currentPage = 1}) async {
@@ -15,6 +18,18 @@ class MovieService {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  static void getYoutubeId(int id) async {
+    try {
+      final response =
+          await _dio.get('$baseurl/movie/$id/videos?api_key=$apiKey');
+
+      var youtubeId = response.data['results'][0]['key'];
+      videoBaseUrl = youtubeId;
+    } catch (error) {
+      log("Exception: $error");
     }
   }
 }

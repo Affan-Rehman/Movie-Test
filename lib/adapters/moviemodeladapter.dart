@@ -8,12 +8,12 @@ class MovieResultsModelAdapter extends TypeAdapter<MovieResultsModel> {
   @override
   MovieResultsModel read(BinaryReader reader) {
     // Read data from Hive and convert it into MovieResultsModel instance
-    final fields = reader.readMap() as Map<dynamic, dynamic>;
+    final fields = reader.readMap();
     return MovieResultsModel(
       adult: fields['adult'] as bool?,
       backdropPath: fields['backdropPath'] as String?,
       genreIds: (fields['genreIds'] as List<dynamic>?)?.cast<int>(),
-      id: fields['id'] as int?,
+      id: fields['id'] as int,
       originalLanguage: fields['originalLanguage'] as String?,
       originalTitle: fields['originalTitle'] as String?,
       overview: fields['overview'] as String?,

@@ -1,13 +1,29 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:movie_test/constants.dart';
 import 'package:movie_test/models/movie.model.dart';
 import 'package:movie_test/screens/ticketscreen.dart';
+import 'package:movie_test/screens/trailerscreen.dart';
+import 'package:movie_test/services/movie.service.dart';
 import 'package:movie_test/widgets/text.widget.dart';
 import 'package:intl/intl.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
-  final MovieResultsModel movieResultsModel;
-  const MovieDetailsScreen({Key? key, required this.movieResultsModel})
+class MovieDetailsScreen extends StatefulWidget {
+  MovieResultsModel movieResultsModel;
+  MovieDetailsScreen({Key? key, required this.movieResultsModel})
       : super(key: key);
+
+  @override
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  @override
+  void initState() {
+    MovieService.getYoutubeId(widget.movieResultsModel.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +40,7 @@ class MovieDetailsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                          "https://image.tmdb.org/t/p/w500/${movieResultsModel.backdropPath}"),
+                          "https://image.tmdb.org/t/p/w500/${widget.movieResultsModel.backdropPath}"),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -33,7 +49,7 @@ class MovieDetailsScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            ("In Theaters ${formatDate(movieResultsModel.releaseDate)}"),
+                            ("In Theaters ${formatDate(widget.movieResultsModel.releaseDate)}"),
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -50,7 +66,7 @@ class MovieDetailsScreen extends StatelessWidget {
                                     MaterialPageRoute(
                                         builder: (_) => TicketScreen(
                                               movieResultsModel:
-                                                  movieResultsModel,
+                                                  widget.movieResultsModel,
                                             )));
                               },
                               style: ElevatedButton.styleFrom(
@@ -75,12 +91,11 @@ class MovieDetailsScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: OutlinedButton(
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (_) => TrailerScreen(
-                                //             trailerUrl:
-                                //                 "https://api.themoviedb.org/3/movie/${movieResultsModel.id}/videos")));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => TrailerScreen(
+                                            trailerUrl: videoBaseUrl)));
                               },
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -127,7 +142,8 @@ class MovieDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 10,
-                        children: movieResultsModel.genreIds?.map((genreId) {
+                        children: widget.movieResultsModel.genreIds
+                                ?.map((genreId) {
                               final genre = MovieResultsModel.genres[genreId];
                               Color genreColor = Colors.blue; // Default color
 
@@ -196,7 +212,7 @@ class MovieDetailsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        movieResultsModel.overview.toString(),
+                        widget.movieResultsModel.overview.toString(),
                         textAlign: TextAlign.justify,
                         style: const TextStyle(color: Color(0xFF8F8F8F)),
                       ),
@@ -223,7 +239,7 @@ class MovieDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    movieResultsModel.title.toString(),
+                    widget.movieResultsModel.title.toString(),
                     style: const TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ],
