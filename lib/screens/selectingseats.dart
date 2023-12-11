@@ -4,7 +4,8 @@ import 'package:movie_test/screens/moviedetails.screen.dart';
 
 class SelectingSeats extends StatelessWidget {
   final MovieResultsModel movieResultsModel;
-  SelectingSeats({Key? key, required this.movieResultsModel}) : super(key: key);
+  const SelectingSeats({Key? key, required this.movieResultsModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,18 +54,18 @@ class SelectingSeats extends StatelessWidget {
                     children: [
                       Container(
                         decoration:
-                            BoxDecoration(color: const Color(0xFFF6F6FA)),
+                            const BoxDecoration(color: Color(0xFFF6F6FA)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Container(
-                              margin: EdgeInsets.only(left: 20),
+                              margin: const EdgeInsets.only(left: 20),
                               child: Image.asset(
                                 'assets/images/seats_big.png',
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Divider(
@@ -121,16 +122,17 @@ class SelectingSeats extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Container(margin: EdgeInsets.all(10), child: const WidgetSeat()),
+          Container(
+              margin: const EdgeInsets.all(10), child: const WidgetSeat()),
           const SizedBox(
             height: 20,
           ),
           const WidgetRow(),
-          Spacer(),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: 108,
                 height: 50,
                 child: Stack(
@@ -142,14 +144,14 @@ class SelectingSeats extends StatelessWidget {
                         width: 108,
                         height: 50,
                         decoration: ShapeDecoration(
-                          color: Color(0x19A5A5A5),
+                          color: const Color(0x19A5A5A5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       left: 20,
                       top: 22,
                       child: Text(
@@ -164,7 +166,7 @@ class SelectingSeats extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       left: 20,
                       top: 9,
                       child: Text(
@@ -185,7 +187,7 @@ class SelectingSeats extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.05,
               ),
-              Container(
+              SizedBox(
                 width: 216,
                 height: 50,
                 child: Stack(
@@ -197,14 +199,14 @@ class SelectingSeats extends StatelessWidget {
                         width: 216,
                         height: 50,
                         decoration: ShapeDecoration(
-                          color: Color(0xFF61C3F2),
+                          color: const Color(0xFF61C3F2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
                     ),
-                    Positioned(
+                    const Positioned(
                       left: 53,
                       bottom: 0,
                       top: 25,
@@ -225,7 +227,7 @@ class SelectingSeats extends StatelessWidget {
               )
             ],
           ),
-          Spacer()
+          const Spacer()
         ],
       ),
     );

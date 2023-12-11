@@ -5,7 +5,8 @@ import 'package:movie_test/screens/selectingseats.dart';
 
 class TicketScreen extends StatefulWidget {
   final MovieResultsModel movieResultsModel;
-  TicketScreen({Key? key, required this.movieResultsModel}) : super(key: key);
+  const TicketScreen({Key? key, required this.movieResultsModel})
+      : super(key: key);
 
   @override
   State<TicketScreen> createState() => _TicketScreenState();
@@ -113,7 +114,7 @@ class _TicketScreenState extends State<TicketScreen> {
               const SizedBox(height: 20),
               const Text(
                 'Select Seats',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),

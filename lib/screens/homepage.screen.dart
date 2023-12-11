@@ -6,7 +6,7 @@ import '../controllers/movie.controller.dart';
 import '../widgets/moviecard.widget.dart';
 
 class MoviesHomePage extends StatefulWidget {
-  MoviesHomePage({super.key});
+  const MoviesHomePage({super.key});
 
   @override
   State<MoviesHomePage> createState() => _MoviesHomePageState();
@@ -50,7 +50,7 @@ class _MoviesHomePageState extends State<MoviesHomePage> {
           child: Consumer<MovieServiceController>(
             builder: (context, movieService, child) {
               if (movieService.isLoading) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(
                     backgroundColor: Colors.black,
                     color: Colors.white,
@@ -60,7 +60,7 @@ class _MoviesHomePageState extends State<MoviesHomePage> {
                 return Consumer<MySearchController>(
                   builder: (context, searchCtr, child) {
                     if (searchPvr.namesList.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Text(
                           "No Movies Found 🧐",
                           style: TextStyle(

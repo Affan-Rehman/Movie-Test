@@ -220,7 +220,7 @@ String formatDate(String? dateString) {
     String formattedDate = DateFormat.yMMMMd().format(parsedDate);
 
     // Prepend "In theaters" to the formatted date
-    return "$formattedDate";
+    return formattedDate;
   } else {
     return "Release date unavailable"; // or any default message when date is not available
   }

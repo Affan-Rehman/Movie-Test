@@ -4,7 +4,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class TrailerScreen extends StatelessWidget {
   final String trailerUrl;
 
-  TrailerScreen({required this.trailerUrl});
+  const TrailerScreen({super.key, required this.trailerUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class TrailerScreen extends StatelessWidget {
             child: YoutubePlayer(
               controller: YoutubePlayerController(
                 initialVideoId: YoutubePlayer.convertUrlToId(trailerUrl)!,
-                flags: YoutubePlayerFlags(
+                flags: const YoutubePlayerFlags(
                   autoPlay: true,
                   mute: false,
                 ),
