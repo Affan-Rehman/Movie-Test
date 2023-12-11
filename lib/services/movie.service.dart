@@ -29,6 +29,7 @@ class MovieService {
       var youtubeId = response.data['results'][0]['key'];
       videoBaseUrl = youtubeId;
     } catch (error) {
+      videoBaseUrl = "";
       log("Exception: $error");
     }
   }

@@ -91,11 +91,21 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             width: MediaQuery.of(context).size.width * 0.5,
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => TrailerScreen(
-                                            trailerUrl: videoBaseUrl)));
+                                if (!(videoBaseUrl == "")) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => TrailerScreen(
+                                              trailerUrl: videoBaseUrl)));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Trailer could not be fetched'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
                               },
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
