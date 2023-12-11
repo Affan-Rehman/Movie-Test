@@ -1,8 +1,19 @@
 import 'dart:ui';
 
 const baseurl = "https://api.themoviedb.org/3";
+
 const apiKey = "d501567593ff834b63ac29a78c7b728a";
+
+//updated each time a new movie is clicked
 String videoBaseUrl = '';
+
+//connectivity status
+bool connectivity = true;
+
+//local db status
+bool local = true;
+
+//used for genres
 final Map<int, Color> genreColorMap = {
   28: const Color(0xFF15D2BC), // Action
   12: const Color(0xFF008000), // Adventure

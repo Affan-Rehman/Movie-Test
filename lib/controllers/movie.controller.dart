@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:movie_test/constants.dart';
 
 import 'package:movie_test/models/movie.model.dart';
 import '../services/movie.service.dart';
@@ -22,26 +24,30 @@ class MovieServiceController with ChangeNotifier {
     _isLoading = true;
 
     try {
-      final responseBody =
-          await MovieService.getPopularMoviesList(currentPage: currentPage);
-      final movieList = json.decode(responseBody);
+      if (!local && connectivity) {
+        final responseBody =
+            await MovieService.getPopularMoviesList(currentPage: currentPage);
+        final movieList = json.decode(responseBody);
 
-      final movieListModelData = <MovieResultsModel>[];
-      for (var element in movieList['results']) {
-        movieListModelData.add(MovieResultsModel.fromJson(element));
+        final movieListModelData = <MovieResultsModel>[];
+        for (var element in movieList['results']) {
+          movieListModelData.add(MovieResultsModel.fromJson(element));
+        }
+
+        _movieList = movieListModelData.toSet().toList();
+        _currentPage = movieList['page'];
+        _totalPage = movieList['total_pages'];
+      }
+      final box = await Hive.openBox<MovieResultsModel>('movieBox');
+      if (local) {
+        _movieList.addAll(box.values.toList());
       }
 
-      _movieList = movieListModelData.toSet().toList();
-
-      final box = await Hive.openBox<MovieResultsModel>('movieBox');
       for (var movie in _movieList) {
         if (!box.containsKey(movie.id)) {
           box.put(movie.id, movie);
         }
       }
-
-      _currentPage = movieList['page'];
-      _totalPage = movieList['total_pages'];
 
       _isLoading = false;
       notifyListeners();

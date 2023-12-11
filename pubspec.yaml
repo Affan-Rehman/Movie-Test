@@ -22,6 +22,7 @@ dependencies:
   google_fonts: ^4.0.4
   dio: ^5.4.0
   mockito: ^5.4.3
+  connectivity: ^3.0.6
   
 
 dev_dependencies:

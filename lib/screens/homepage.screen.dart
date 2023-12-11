@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_test/constants.dart';
 import 'package:movie_test/screens/moviedetails.screen.dart';
 import 'package:movie_test/controllers/search.controller.dart';
 import 'package:provider/provider.dart';
@@ -101,12 +102,60 @@ class _MoviesHomePageState extends State<MoviesHomePage> {
                                         ),
                                       );
                                     },
-                                    child: displaymovieCard(
-                                      image:
-                                          "https://image.tmdb.org/t/p/w500/${searchCtr.namesList[index].backdropPath}",
-                                      moviename:
-                                          searchCtr.namesList[index].title,
-                                    ),
+                                    child: connectivity
+                                        ? displaymovieCard(
+                                            image:
+                                                "https://image.tmdb.org/t/p/w500/${searchCtr.namesList[index].backdropPath}",
+                                            moviename: searchCtr
+                                                .namesList[index].title,
+                                          )
+                                        : Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: Colors.black),
+                                            alignment: Alignment.center,
+                                            height: 200,
+                                            child: searchCtr.namesList[index]
+                                                        .title !=
+                                                    null
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          " ${searchCtr.namesList[index].title}",
+                                                          style: const TextStyle(
+                                                              fontSize: 20,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                        Text(
+                                                          " ${searchCtr.namesList[index].overview}",
+                                                          style: const TextStyle(
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ),
                                   );
                                 },
                               ),

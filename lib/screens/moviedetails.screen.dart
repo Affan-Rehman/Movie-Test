@@ -37,13 +37,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 Container(
                   width: double.infinity,
                   height: 466,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          "https://image.tmdb.org/t/p/w500/${widget.movieResultsModel.backdropPath}"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+                  decoration: connectivity
+                      ? BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(
+                                "https://image.tmdb.org/t/p/w500/${widget.movieResultsModel.backdropPath}"),
+                            fit: BoxFit.fill,
+                          ),
+                        )
+                      : BoxDecoration(color: Colors.black),
                   child: Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
