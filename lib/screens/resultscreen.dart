@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_test/constants.dart';
 import 'package:movie_test/models/movie.model.dart';
 import 'package:movie_test/screens/moviedetails.screen.dart';
 
@@ -44,12 +45,14 @@ class ResultScreen extends StatelessWidget {
                             height: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  "https://image.tmdb.org/t/p/w500/${list[index].backdropPath}",
-                                ),
-                              ),
+                              image: connectivity
+                                  ? DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        "https://image.tmdb.org/t/p/w500/${list[index].backdropPath}",
+                                      ),
+                                    )
+                                  : null,
                             ),
                           ),
                           const SizedBox(width: 10),

@@ -46,7 +46,7 @@ displaymovieCard({
             left: 20,
             child: moviename != null
                 ? Text(
-                    " $moviename",
+                    "$moviename",
                     style: const TextStyle(
                         fontSize: 20,
                         color: Colors.white,
