@@ -34,14 +34,20 @@ class MovieServiceController with ChangeNotifier {
           movieListModelData.add(MovieResultsModel.fromJson(element));
         }
 
-        _movieList = movieListModelData.toSet().toList();
+        _movieList = movieListModelData;
         _currentPage = movieList['page'];
         _totalPage = movieList['total_pages'];
       }
+
       final box = await Hive.openBox<MovieResultsModel>('movieBox');
       if (local) {
         _movieList.addAll(box.values.toList());
       }
+
+      // Remove duplicates from _movieList using a set
+      final movieSet = <MovieResultsModel>{};
+      movieSet.addAll(_movieList);
+      _movieList = movieSet.toList();
 
       for (var movie in _movieList) {
         if (!box.containsKey(movie.id)) {

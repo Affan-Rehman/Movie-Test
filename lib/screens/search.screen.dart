@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:movie_test/constants.dart';
 import 'package:movie_test/controllers/search.controller.dart';
 import 'package:movie_test/models/movie.model.dart';
 import 'package:movie_test/screens/moviedetails.screen.dart';
@@ -165,39 +166,157 @@ class MovieSearch extends StatelessWidget {
                                         itemCount: searchCtr.searchList.length,
                                         itemBuilder: (context, index) {
                                           return InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        MovieDetailsScreen(
-                                                      movieResultsModel:
-                                                          searchCtr.searchList[
-                                                              index],
-                                                    ),
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MovieDetailsScreen(
+                                                    movieResultsModel: searchCtr
+                                                        .searchList[index],
                                                   ),
-                                                );
-                                              },
-                                              child: searched
-                                                  ? displaymovieCard(
-                                                      image:
-                                                          "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
-                                                      moviename: searchCtr
-                                                          .searchList[index]
-                                                          .title,
-                                                    )
-                                                  : Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}"),
-                                                          fit: BoxFit.cover,
+                                                ),
+                                              );
+                                            },
+                                            child: searched
+                                                ? connectivity
+                                                    ? displaymovieCard(
+                                                        image:
+                                                            "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}",
+                                                        moviename: searchCtr
+                                                            .searchList[index]
+                                                            .title,
+                                                      )
+                                                    : Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                            color:
+                                                                Colors.black),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 200,
+                                                        child: searchCtr
+                                                                    .namesList[
+                                                                        index]
+                                                                    .title !=
+                                                                null
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      " ${searchCtr.namesList[index].title}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              20,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
+                                                                    Text(
+                                                                      " ${searchCtr.namesList[index].overview}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                      maxLines:
+                                                                          2,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            : const SizedBox
+                                                                .shrink(),
+                                                      )
+                                                : connectivity
+                                                    ? Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          image:
+                                                              DecorationImage(
+                                                            image: NetworkImage(
+                                                                "https://image.tmdb.org/t/p/w500/${searchCtr.searchList[index].backdropPath}"),
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
+                                                      )
+                                                    : Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                            color:
+                                                                Colors.black),
+                                                        alignment:
+                                                            Alignment.center,
+                                                        height: 200,
+                                                        child: searchCtr
+                                                                    .namesList[
+                                                                        index]
+                                                                    .title !=
+                                                                null
+                                                            ? Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      " ${searchCtr.namesList[index].title}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                    ),
+                                                                    Text(
+                                                                      " ${searchCtr.namesList[index].overview}",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          fontWeight:
+                                                                              FontWeight.w500),
+                                                                      maxLines:
+                                                                          1,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            : const SizedBox
+                                                                .shrink(),
                                                       ),
-                                                    ));
+                                          );
                                         },
                                       )
                                     : Center(
